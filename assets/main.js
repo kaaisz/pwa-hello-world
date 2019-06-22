@@ -6,3 +6,10 @@ async function installServiceWorker () {
 }
 
 installServiceWorker();
+
+navigator.serviceWorker.addEventListener('message', async (event) => {
+  const message = event.data;
+  if (message.type === 'ping') {
+    console.log(`[main] ${message.text}`);
+  }
+});

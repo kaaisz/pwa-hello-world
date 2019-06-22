@@ -35,3 +35,15 @@ sw.addEventListener('fetch', (event) => {
     event.respondWith(p);
   }
 });
+
+setInterval(async () => {
+  const text = 'SW#4';
+  console.log(`[SW] ${text}`);
+  const clients = await sw.clients.matchAll();
+  clients.forEach((client) => {
+    client.postMessage({
+      text,
+      type: 'ping',
+    });
+  });
+}, 1000);
