@@ -9,14 +9,21 @@ async function updateCache () {
 
 sw.addEventListener('install', (event) => {
   console.log('[SW] Install');
-  const p = updateCache();
+  const p = updateCache()
+    .then(async () => {
+      const clients = await sw.clients.matchAll({ includeUncontrolled: true });
+      clients.forEach((client) => {
+        const message = { type: 'sw/install' };
+        client.postMessage(message);
+      });
+    });
   event.waitUntil(p);
 });
 
 sw.addEventListener('activate', (event) => {
   console.log('[SW] Activate');
+  sw.clients.claim();
 });
-
 /**
  * @param {RequestInfo} key
  */
@@ -47,3 +54,16 @@ setInterval(async () => {
     });
   });
 }, 1000);
+
+sw.addEventListener('message', async (event) => {
+  const message = event.data;
+
+  switch (message.type) {
+    case 'sw/skipWaiting': {
+      sw.skipWaiting();
+      break;
+    }
+
+    default: // do nothing;
+  }
+});
