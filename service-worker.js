@@ -67,6 +67,7 @@ sw.addEventListener('message', async (event) => {
     default: // do nothing;
   }
 });
+
 /**
  * @param {Request} request
  */
