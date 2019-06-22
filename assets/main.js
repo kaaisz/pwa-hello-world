@@ -23,26 +23,3 @@ navigator.serviceWorker.addEventListener('message', async (event) => {
   }
 });
 
-/**
- * @param {number} ms
- */
-function sleep (ms) {
-  return new Promise((f) => setTimeout(f, ms));
-}
-
-async function main () {
-  const reg = await navigator.serviceWorker.ready;
-  if (reg.waiting) {
-    await sleep(500); // just in case when infinite loop occurs accidentally
-
-    const message = { type: 'sw/skipWaiting' };
-    reg.waiting.postMessage(message);
-    window.location.reload();
-
-    return;
-  }
-
-  console.log('[main] Ready!');
-}
-
-main()

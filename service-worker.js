@@ -67,3 +67,36 @@ sw.addEventListener('message', async (event) => {
     default: // do nothing;
   }
 });
+/**
+ * @param {Request} request
+ */
+async function respondNicely (request) {
+  const cache = await sw.caches.open('pwa-hello-world');
+
+  // fetch if online
+  if (navigator.onLine) {
+    const res = await fetch(request);
+    if (res.status === 200) {
+      console.log('[SW] Update', request.url);
+      cache.put(request, res.clone());
+      return res;
+    }
+  }
+
+  // find cache
+  const cached = await cache.match(request);
+  if (cached) {
+    console.log('[SW] From cache', request.url);
+    return cached;
+  }
+
+  // oops none is available
+  return new Response('', { status: 404 });
+}
+
+sw.addEventListener('fetch', async (event) => {
+  if (event.request.method === 'GET') {
+    const p = respondNicely(event.request);
+    event.respondWith(p);
+  }
+});
