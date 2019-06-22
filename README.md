@@ -18,6 +18,10 @@ Chromeデベロッパーツールの中に入っているよ
 
 ### 注意
 Webページの再読み込み = Service workerの再読み込み、ではない
+Service Workerの再読み込み時は一度unregisterする
 
-オフライン対応
+**オフライン対応**
 キャッシュをWebページに返す
+Devtools -> Application 内のOfflineにチェックを入れる
+再読み込みしても表示されれば成功！
+Audits内のアイコンが切り替わるとインストール可能な状態になる
