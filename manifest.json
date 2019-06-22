@@ -17,5 +17,6 @@
   "start_url": "/pwa-hello-world/",
   "display": "standalone",
   "theme_color": "#008888",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "gcm_sender_id": "636485985927"
 }

@@ -101,3 +101,48 @@ sw.addEventListener('fetch', async (event) => {
     event.respondWith(p);
   }
 });
+
+/**
+ * @param {string} body
+ */
+function showNotification (body) {
+  const title = 'PWA';
+  /** @type {NotificationOptions} */
+  const options = {
+    actions: [
+      {
+        action: 'explore',
+        title: 'Explore this new world',
+      },
+      {
+        action: 'close',
+        title: 'Close notification',
+      },
+    ],
+    body,
+    icon: '/pwa-hello-world/assets/gpui/icon-512.png',
+  };
+  sw.registration.showNotification(title, options);
+}
+
+sw.addEventListener('activate', (event) => {
+  console.log('[SW] Activate');
+  sw.clients.claim();
+  showNotification('Activated!');
+});
+
+sw.addEventListener('notificationclick', (event) => {
+  const { action, notification } = event;
+
+  if (action === 'close') {
+    notification.close();
+  } else {
+    sw.clients.openWindow('http://www.example.com');
+    notification.close();
+  }
+});
+
+sw.addEventListener('push', (event) => {
+  const p = showNotification('Pushed!');
+  event.waitUntil(p);
+});
