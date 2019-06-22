@@ -63,3 +63,28 @@ elNotificationEnabled.addEventListener('click', () => {
   const enabled = elNotificationEnabled.checked;
   turnNotification(elNotificationEnabled, enabled);
 });
+
+
+/**
+ * @param {string} body
+ */
+function showNotification (body) {
+  if (Notification.permission !== 'granted') {
+    return;
+  }
+
+  const title = 'PWA';
+  /** @type {NotificationOptions} */
+  const options = {
+    body,
+    icon: '/pwa-hello-world/assets/gpui/icon-512.png',
+  };
+  const notification = new Notification(title, options);
+  console.log('notification', notification);
+}
+
+/** @type {HTMLButtonElement} */
+const elShowNotification = document.querySelector('#showNotification');
+elShowNotification.addEventListener('click', () => {
+  showNotification('Hello!');
+});
